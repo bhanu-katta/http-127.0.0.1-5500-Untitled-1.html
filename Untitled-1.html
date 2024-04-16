@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reddit ReactJS Posts</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .title {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .selftext {
+    color: #666;
+    margin-bottom: 10px;
+  }
+
+  .url {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .score {
+    color: #28a745;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div id="reddit-posts"></div>
+
+<script>
+  // Fetch Reddit data
+  fetch('https://www.reddit.com/r/reactjs.json')
+    .then(response => response.json())
+    .then(data => {
+      const posts = data.data.children;
+
+      // Display each post
+      posts.forEach(post => {
+        const postData = post.data;
+        const title = postData.title;
+        const selftext = postData.selftext_html;
+        const url = postData.url;
+        const score = postData.score;
+
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        const titleElement = document.createElement('div');
+        titleElement.classList.add('title');
+        titleElement.textContent = title;
+
+        const selftextElement = document.createElement('div');
+        selftextElement.classList.add('selftext');
+        selftextElement.innerHTML = selftext;
+
+        const urlElement = document.createElement('a');
+        urlElement.classList.add('url');
+        urlElement.textContent = 'Read more';
+        urlElement.href = url;
+        urlElement.target = '_blank';
+
+        const scoreElement = document.createElement('div');
+        scoreElement.classList.add('score');
+        scoreElement.textContent = `Score: ${score}`;
+
+        card.appendChild(titleElement);
+        card.appendChild(selftextElement);
+        card.appendChild(urlElement);
+        card.appendChild(scoreElement);
+
+        document.getElementById('reddit-posts').appendChild(card);
+      });
+    })
+    .catch(error => console.error('Error fetching Reddit data:', error));
+</script>
+
+</body>
+</html>
